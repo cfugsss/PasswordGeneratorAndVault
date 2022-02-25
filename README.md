@@ -9,5 +9,5 @@ username, and app as a list in a new file so the program can retrieve your infor
 nice sentance including your password, username, and sitename/app in the text file. Passwords are also not encryped so. 
 
   2/23/22
-  currently working on it
-  8pm now and still currently working on it
+  currently working on it || 8pm now and still currently working on it || (later that night) made a lot of headway today, basically threw away the whole first script and rewrote
+  it using tkinter so its a gui. Excited for the finished product, unitl next time (probably tomorrow)
