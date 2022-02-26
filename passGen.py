@@ -1,9 +1,11 @@
 from re import sub
 import string
 import random
+import pickle
 import tkinter
 from tkinter import *
-from storage import vaultFunc
+from webbrowser import get
+
 
 
 
@@ -40,9 +42,14 @@ def clearStart(x, y, z, c, l, o):
 def submit():
     username = name_entry.get()
     site=site_entry.get()
-    vaultFunc(username, site, password)
+    userList = [site, username, password]
+    pickle.dump(userList, open("storage.bat", "wb"))
     clearGenPageTwo(genTitle, name_label, name_entry, site_label, site_entry, sub_btn)
     genFinal(genFinalMsg, passwordCopy, finishedGen)
+    data = pickle.load(open("storage.dat", "rb"))
+    print(data)
+    
+    
 
 
 def clearGenPageTwo(a, b, c, d, e, f):

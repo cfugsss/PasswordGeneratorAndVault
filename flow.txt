@@ -1,0 +1,15 @@
+open program -->
+window pops up-->
+start page with gen and ret buttons-->
+if gen button clicked-->
+	remove attributes from start page
+	input field for app
+	input field for username
+	show password
+	done
+if gen button ret-->
+	input field for app name
+	search vault log for list with appname
+	show list
+	done
+	
