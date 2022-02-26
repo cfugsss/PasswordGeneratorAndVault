@@ -13,3 +13,9 @@ nice sentance including your password, username, and sitename/app in the text fi
   it using tkinter so its a gui. Excited for the finished product, unitl next time (probably tomorrow) || Well update, i remade this code and played csgo all day. I remade this 
   original code in gui using tkinter, so far i only 90% finished the generating password portion. I just need to figure how how to store a list of [username, sitename, password] 
   inot a seperate file and ill be done with half of the project; But thats for another day. Until tomorrow.
+  
+  2/24/22
+  Yesterday I didnt log anything but spent some time trying to figure out how to store the data to a seperate file without overwriting it everytime. I watched some videos and
+  did some research. I decided to go with a sql table using sqlite3. I also decided to create a new code because in passGen.py I was learning tkinter and how it works, now i 
+  think i could make it better and more streamline. I only have a little bit of time today but im going to start the new code either setting up the new gui or starting building
+  the database with sqlite.
