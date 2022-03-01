@@ -19,3 +19,8 @@ nice sentance including your password, username, and sitename/app in the text fi
   did some research. I decided to go with a sql table using sqlite3. I also decided to create a new code because in passGen.py I was learning tkinter and how it works, now i 
   think i could make it better and more streamline. I only have a little bit of time today but im going to start the new code either setting up the new gui or starting building
   the database with sqlite.
+  
+  3/1/22
+  watched some tutorials on how to use variables in sqlite3, so i can add the values from variables username, site, and password to the sql table. Once i figure that 
+  out ill implement it into the code in the generation portion and a function to retrieve it, and then it should be finished for now. Until i come back
+  at some point to work on it again but after this its onto the next project.
