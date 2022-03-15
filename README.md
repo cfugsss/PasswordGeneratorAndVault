@@ -24,3 +24,10 @@ nice sentance including your password, username, and sitename/app in the text fi
   watched some tutorials on how to use variables in sqlite3, so i can add the values from variables username, site, and password to the sql table. Once i figure that 
   out ill implement it into the code in the generation portion and a function to retrieve it, and then it should be finished for now. Until i come back
   at some point to work on it again but after this its onto the next project.
+  
+  3/15/22
+  
+  So I covered all the basics of python by this point and have started taking some intermediate courses and completly understand easier concepts to do this project. Im going
+  continue more with the course but im also slowly editing this code when I have time. I will update it fully once its completly working. I am now using pandas to store the
+  data and to retrieve it later. Im excited to finally "finish" (by that I mean have it wokring. For the future I either want to make the gui look way better or convert the whole
+  thing over to a web app using django or flask. Well see what happens.
