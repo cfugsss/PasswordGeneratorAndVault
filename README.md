@@ -32,7 +32,16 @@ nice sentance including your password, username, and sitename/app in the text fi
   data and to retrieve it later. Im excited to finally "finish" (by that I mean have it wokring. For the future I either want to make the gui look way better or convert the whole
   thing over to a web app using django or flask. Well see what happens.
   
-  9/21/22
+9/21/22
   
     Well its been a few months and have not been keeping up with showing new things on github however, I went back and fixed this up. Cleaned up or learned rather, about databases so now you can actually store and retrieve things from it. Works pretty well but only works locally. Not the most secure thing in the world but
     for starters it works well. 
+    
+9/22/22
+
+    After getting a final product that wokrs yesterday I came back today and wokred on making the gui look better. Added background image, changed fonts, 
+    changed sizing, and changed colors. Also implemented a back home button so after you retrieve or generate passwords, you can be brought back to the home
+    page to continue using the app. Finally, added a close to the connection to database after things are retrieved or created. Next thing to work on is an error 
+    message or pop up for when a user searches the database for something that isnt there.
+    
+
