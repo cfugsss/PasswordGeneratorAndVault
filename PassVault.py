@@ -1,35 +1,22 @@
-import tkinter
+import tkinter as tk
 from tkinter import *
-import sqlite3
 import random
 import string
+import sqlite3
 
 #creating password function to generate 12 char string (upper and lower case with numbers) ---------------
 
-def getPassword(size=12, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+def getPassword(size=12, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase + string.punctuation):
     return ''.join(random.choice(chars) for _ in range(size))
 
 password = getPassword()
 
-#building table in sqlite3 ------------------
+#creating gui ---------
 
-#connect to database and create cursor
-
-conn = sqlite3.connect('vault.db')
-c = conn.cursor()
-
-#function for user to create database with button
-
-def createTable ():
-    c.execute("""CREATE TABLE vault (
-        sitename TEXT
-        username TEXT
-        password TEXT
-    )""")
-
-    conn.commit()
-
-    conn.close()
+window = tk.Tk()
+window.geometry("450x300")
+window.title("Password Manager")
+window.configure(background = "LightSkyBlue3")
 
 #finished button function to close window
 
@@ -41,6 +28,7 @@ def finished():
 def copyPassClip():
     window.clipboard_clear()
     window.clipboard_append(password)
+
 
 #function to center and pack element
 
@@ -59,38 +47,12 @@ def showEntry(x):
     x.config(justify=CENTER)
     x.pack()
 
-
-#when create table button is clicked        still need to add actually creation of table later ==========================
-
-def tablePressed ():
-    hideEl(instruct13)
-    hideEl(instruct14)
-    hideEl(instruct15)
-    hideEl(createTblBtn)
-    showEl(tableMade)
-
-
-#start page gone function
-
-def startGone(a, b, c, d, e, f, g, h, i, j, k):
-    a.pack_forget()
-    b.pack_forget()
-    c.pack_forget()
-    d.pack_forget()
-    e.pack_forget()
-    f.pack_forget()
-    g.pack_forget()
-    h.pack_forget()
-    i.pack_forget()
-    j.pack_forget()
-    k.pack_forget()
-
-#when generate button is pressed 
-
-def genBtnClick():
-    startGone(heading1, instruct11, instruct12, instruct13, instruct14,
-     instruct15, space1, space2, genButton1, retButton1, createTblBtn)
-    hideEl(tableMade)
+def generate():
+    hideEl(heading1)
+    hideEl(instruct11)
+    hideEl(instruct12)
+    hideEl(genButton1)
+    hideEl(retButton1)
     showEl(genTitle)
     showEl(nameLabel)
     showEntry(nameEntry)
@@ -98,103 +60,123 @@ def genBtnClick():
     showEntry(siteEntry)
     showEl(subBtn)
 
-#when submit button is pressed on g1
+def retrieve():
+    hideEl(heading1)
+    hideEl(instruct11)
+    hideEl(instruct12)
+    hideEl(genButton1)
+    hideEl(retButton1)
+    showEl(retTitle)
+    showEntry(retSiteEntry)
+    showEl(retSiteSubmit)
 
-def hideg1():
+def getPassword():
     hideEl(genTitle)
     hideEl(nameLabel)
     hideEl(nameEntry)
     hideEl(siteLabel)
     hideEl(siteEntry)
     hideEl(subBtn)
-
-
-def submitg1():
-    username = nameEntry.get()
-    site = siteEntry.get()
-    #add username, site, password to database
-    hideg1()
     showEl(genFinalMsg)
     showEl(passwordCopy)
     showEl(finishedGen)
+    username = nameEntry.get()
+    site = siteEntry.get()
+    conn = sqlite3.connect("vault.db")
+    with conn:
+        cursor = conn.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS Users (id integer PRIMARY KEY AUTOINCREMENT, Sitename TEXT,Username TEXT, Password TEXT)")
+    cursor.execute("INSERT INTO users (Sitename,Username,Password)" "VALUES(?,?,?)", (site, username, password))
+    conn.commit()
+    # with conn:
+    #     cursor.execute("SELECT * FROM users")
+    #     print(cursor.fetchall())
 
-#when submit button is pressed on r1
+def retrieveAcc():
+    hideEl(retTitle)
+    hideEl(retSiteEntry)
+    hideEl(retSiteSubmit)
+    sitename = retSiteEntry.get()
+    conn = sqlite3.connect("vault.db")
+    with conn:
+        cursor = conn.cursor()
+    with conn:
+        cursor.execute(f'''
+                    SELECT Sitename, Username, Password
+                    FROM Users
+                    WHERE Sitename="{sitename}"
+                    ''')
+        ans = cursor.fetchone()
+        window.clipboard_clear()
+        window.clipboard_append(str(ans[2]))
+        siteShow = Label (window, text=f"Sitename: {ans[0]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        showEl(siteShow)
+        userShow = Label (window, text=f"Username: {ans[1]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        showEl(userShow)
+        passShow = Label (window, text=f"Password: {ans[2]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        showEl(passShow)
+        alertBox = Label (window, text="Password copied to clipboard!")
+        showEl(alertBox)
+        
 
-def retBtnClick():
-    startGone(heading1, instruct11, instruct12, instruct13, instruct14,
-     instruct15, space1, space2, genButton1, retButton1, createTblBtn)
-    showEl(retTitle)
-    showEntry(retSiteEntry)
-    showEl(retSiteSubmit)
+        
 
-#creating gui ---------
+    
+    
+        
 
-window = tkinter.Tk()
-window.geometry("450x300")
-window.title("Password Generator and Vault")
-window.configure(background = "black")
+
+
+
 
 #start screen
 
-heading1 = Label (window, text="Welcome to Cfugs's: The Vault!", bg="green", fg="white", font="none 12 bold")
+heading1 = Label (window, text="Welcome to The Vault!", bg="LightSkyBlue3", fg="black", font="none 15 bold")
 showEl(heading1)
-instruct11 = Label (window, text="Below, choose between Genterating a new password", bg="black", fg="white", font="none 9 bold")
+instruct11 = Label (window, text="Below, choose between Genterating a new password", bg="LightSkyBlue3", fg="black", font="none 12 bold")
 showEl(instruct11)
-instruct12 = Label (window, text="or Retrieveing one from the vault", bg="black", fg="white", font="none 9 bold")
+instruct12 = Label (window, text="or Retrieveing one from the vault", bg="LightSkyBlue3", fg="black", font="none 12 bold")
 showEl(instruct12)
-space1 = Label (window, text="--------------------------------------------------", bg="black", fg="white", font="none 9 bold")
-showEl(space1)
-genButton1 = Button (window, text="Generate", width=10, command=genBtnClick)
+genButton1 = Button (window, text="Generate", width=15, height= 3, command=generate)
 showEl(genButton1)
-retButton1 = Button (window, text="Retrieve", width=10, command=retBtnClick)
+retButton1 = Button (window, text="Retrieve", width=15, height = 3, command=retrieve)
 showEl(retButton1)
-space2 = Label (window, text="--------------------------------------------------", bg="black", fg="white", font="none 9 bold")
-showEl(space2)
-instruct13 = Label (window, text="If this is your first time using the vault", bg="black", fg="white", font="none 9 bold")
-showEl(instruct13)
-instruct14 = Label (window, text="Please create a table by clicking the button below", bg="black", fg="white", font="none 9 bold")
-showEl(instruct14)
-instruct15 = Label (window, text="If youve already hit this button before, do not make a new table", bg="black", fg="white", font="none 9 bold")
-showEl(instruct15)
-createTblBtn = Button (window, text="Create Table", width=12, command=tablePressed)
-showEl(createTblBtn)
-tableMade = Label (window, text="Table created successfully!", bg="black", fg="white", font="none 9 bold")
-hideEl(tableMade)
 
-#g1
+# gen1
 
-genTitle = Label (window, text="Please fill out boxes below", bg="green", fg="white", font="none 12 bold")
+genTitle = Label (window, text="Please fill out boxes below", bg="LightSkyBlue3", fg="black", font="none 12 bold")
 hideEl(genTitle)
-nameLabel = Label(window, text = 'Username', font=('none',10, 'bold'))
+nameLabel = Label(window, text = 'Username', fg="black", font=('none',15, 'bold'))
 hideEl(nameLabel)
-nameEntry = Entry(window, width=20, font=('calibre',10,'normal'))
+nameEntry = Entry(window, width=20, font=('none',12,'bold'))
 hideEl(nameEntry)
-siteLabel = Label(window, text = 'Site or app name', font = ('none',10,'bold'))
+siteLabel = Label(window, text = 'Site or app name', font = ('none',12,'bold'))
 hideEl(siteLabel)
-siteEntry = Entry(window, width=20, font = ('none',10,'bold'))
+siteEntry = Entry(window, width=20, font = ('none',12,'bold'))
 hideEl
-subBtn = Button(window, text = 'Submit', command=submitg1)
+subBtn = Button(window, text = 'Submit', command=getPassword)
 hideEl(subBtn)
 
-#g2
+#gen 2
 
-genFinalMsg = Label (window, text=f"Your password is saved in the vault! Your password is {password}", bg="green", font = ('none',10,'bold'))
+genFinalMsg = Label (window, text=f"Your password is saved in the vault! Your password is {password}", bg="LightSkyBlue3", fg="black", font = ('none',10,'bold'))
 hideEl(genFinalMsg)
 passwordCopy = Button (window, text="Copy password to clipboard", command=copyPassClip)
 hideEl(passwordCopy)
 finishedGen = Button (window, text="Finished", command=finished)
 hideEl(finishedGen)
 
-#r1
+#ret 1
 
-retTitle = Label (window, text="Please enter the sitename for password.",  bg="green", font = ('none',12,'bold'))
+retTitle = Label (window, text="Please enter the sitename for password.",  bg="LightSkyBlue3", fg="black", font = ('none',15,'bold'))
 hideEl(retTitle)
 retSiteEntry = Entry (window, width=25)
 hideEl(retSiteEntry)
-retSiteSubmit = Button (window, text="submit")
+retSiteSubmit = Button (window, text="submit", command=retrieveAcc)
+
+#ret 2
+
+
 
 
 window.mainloop()
-
-
-
