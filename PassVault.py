@@ -1,8 +1,11 @@
+from email.mime import image
 import tkinter as tk
 from tkinter import *
 import random
 import string
 import sqlite3
+import PIL
+from PIL import ImageTk, Image
 
 #creating password function to generate 12 char string (upper and lower case with numbers) ---------------
 
@@ -13,10 +16,19 @@ password = getPassword()
 
 #creating gui ---------
 
+
+
 window = tk.Tk()
 window.geometry("450x300")
 window.title("Password Manager")
-window.configure(background = "LightSkyBlue3")
+# window.configure(background = "vaultbg.jpg")
+
+backg = Image.open("vaultbg.jpg")
+bg = ImageTk.PhotoImage(backg)
+background_label = tk.Label(window, image=bg)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+
 
 #finished button function to close window
 
@@ -70,6 +82,17 @@ def retrieve():
     showEntry(retSiteEntry)
     showEl(retSiteSubmit)
 
+def backHomeGen():
+    hideEl(genFinalMsg)
+    hideEl(passwordCopy)
+    hideEl(finishedGen)
+    hideEl(backtoHome)
+    showEl(heading1)
+    showEl(instruct11)
+    showEl(instruct12)
+    showEl(genButton1)
+    showEl(retButton1)
+
 def getPassword():
     hideEl(genTitle)
     hideEl(nameLabel)
@@ -80,6 +103,7 @@ def getPassword():
     showEl(genFinalMsg)
     showEl(passwordCopy)
     showEl(finishedGen)
+    showEl(backtoHome)
     username = nameEntry.get()
     site = siteEntry.get()
     conn = sqlite3.connect("vault.db")
@@ -88,6 +112,7 @@ def getPassword():
     cursor.execute("CREATE TABLE IF NOT EXISTS Users (id integer PRIMARY KEY AUTOINCREMENT, Sitename TEXT,Username TEXT, Password TEXT)")
     cursor.execute("INSERT INTO users (Sitename,Username,Password)" "VALUES(?,?,?)", (site, username, password))
     conn.commit()
+    cursor.close()
     # with conn:
     #     cursor.execute("SELECT * FROM users")
     #     print(cursor.fetchall())
@@ -109,33 +134,41 @@ def retrieveAcc():
         ans = cursor.fetchone()
         window.clipboard_clear()
         window.clipboard_append(str(ans[2]))
-        siteShow = Label (window, text=f"Sitename: {ans[0]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        def backHomeRet():
+            hideEl(siteShow)
+            hideEl(userShow)
+            hideEl(passShow)
+            hideEl(alertBox)
+            hideEl(backHome)
+            showEl(heading1)
+            showEl(instruct11)
+            showEl(instruct12)
+            showEl(genButton1)
+            showEl(retButton1)
+            
+        siteShow = Label (window, text=f"Sitename: {ans[0]}", bg="grey50", fg="black", font="none 15 bold")
         showEl(siteShow)
-        userShow = Label (window, text=f"Username: {ans[1]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        userShow = Label (window, text=f"Username: {ans[1]}", bg="grey50", fg="black", font="none 15 bold")
         showEl(userShow)
-        passShow = Label (window, text=f"Password: {ans[2]}", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+        passShow = Label (window, text=f"Password: {ans[2]}", bg="grey50", fg="black", font="none 15 bold")
         showEl(passShow)
         alertBox = Label (window, text="Password copied to clipboard!")
         showEl(alertBox)
+        backHome = Button (window, text="Back Home", command=backHomeRet)
+        showEl(backHome)
+
+        cursor.close()
         
-
-        
-
-    
-    
-        
-
-
 
 
 
 #start screen
 
-heading1 = Label (window, text="Welcome to The Vault!", bg="LightSkyBlue3", fg="black", font="none 15 bold")
+heading1 = Label (window, text="Welcome to The Vault!",bg="grey42", fg="black", font="none 15 bold")
 showEl(heading1)
-instruct11 = Label (window, text="Below, choose between Genterating a new password", bg="LightSkyBlue3", fg="black", font="none 12 bold")
+instruct11 = Label (window, text="Below, choose between Genterating a new password", bg="grey42", fg="black", font="none 12 bold")
 showEl(instruct11)
-instruct12 = Label (window, text="or Retrieveing one from the vault", bg="LightSkyBlue3", fg="black", font="none 12 bold")
+instruct12 = Label (window, text="or Retrieveing one from the vault", bg="grey42", fg="black", font="none 12 bold")
 showEl(instruct12)
 genButton1 = Button (window, text="Generate", width=15, height= 3, command=generate)
 showEl(genButton1)
@@ -144,7 +177,7 @@ showEl(retButton1)
 
 # gen1
 
-genTitle = Label (window, text="Please fill out boxes below", bg="LightSkyBlue3", fg="black", font="none 12 bold")
+genTitle = Label (window, text="Please fill out boxes below", bg="grey42", fg="black", font="none 12 bold")
 hideEl(genTitle)
 nameLabel = Label(window, text = 'Username', fg="black", font=('none',15, 'bold'))
 hideEl(nameLabel)
@@ -159,24 +192,22 @@ hideEl(subBtn)
 
 #gen 2
 
-genFinalMsg = Label (window, text=f"Your password is saved in the vault! Your password is {password}", bg="LightSkyBlue3", fg="black", font = ('none',10,'bold'))
+genFinalMsg = Label (window, text=f"Your password is saved in the vault! Your password is {password}", bg="grey42", fg="black", font = ('none',10,'bold'))
 hideEl(genFinalMsg)
 passwordCopy = Button (window, text="Copy password to clipboard", command=copyPassClip)
 hideEl(passwordCopy)
 finishedGen = Button (window, text="Finished", command=finished)
 hideEl(finishedGen)
+backtoHome = Button (window, text="Back Home", command=backHomeGen)
+hideEl(backtoHome)
 
 #ret 1
 
-retTitle = Label (window, text="Please enter the sitename for password.",  bg="LightSkyBlue3", fg="black", font = ('none',15,'bold'))
+retTitle = Label (window, text="Please enter the sitename for password.",  bg="grey42", fg="black", font = ('none',15,'bold'))
 hideEl(retTitle)
 retSiteEntry = Entry (window, width=25)
 hideEl(retSiteEntry)
 retSiteSubmit = Button (window, text="submit", command=retrieveAcc)
-
-#ret 2
-
-
 
 
 window.mainloop()
