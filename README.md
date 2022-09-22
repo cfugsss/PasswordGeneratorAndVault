@@ -31,3 +31,8 @@ nice sentance including your password, username, and sitename/app in the text fi
   continue more with the course but im also slowly editing this code when I have time. I will update it fully once its completly working. I am now using pandas to store the
   data and to retrieve it later. Im excited to finally "finish" (by that I mean have it wokring. For the future I either want to make the gui look way better or convert the whole
   thing over to a web app using django or flask. Well see what happens.
+  
+  9/21/22
+  
+    Well its been a few months and have not been keeping up with showing new things on github however, I went back and fixed this up. Cleaned up or learned rather, about databases so now you can actually store and retrieve things from it. Works pretty well but only works locally. Not the most secure thing in the world but
+    for starters it works well. 
